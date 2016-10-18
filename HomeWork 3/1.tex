@@ -35,26 +35,23 @@
 	\begin{enumerate}
 		\item
 			Expansion rate: $|H(x)| = |G(1|x)| = 2|x| + 2$.\\
-			Yes, it is a PRG.\\
+			Yes, it is a secure PRG.\\
 			\textbf{Proof:}
 			Suppose, there is a efficient attack $A$ against $H$. Then we use attack $A$ against $G$.
 			Assume $p_A=|\text{Pr}[A(H(s)) = 1] - \text{Pr}[A(r) = 1]|$, $p_B = |\text{Pr}[B(G(s)) = 1] - \text{Pr}[B(r) = 1]|$. If the beginning of $s$ is $1$, $B$ is same with $A$. If th beginning of $s$ is $0$, $B$ is always incorrect. So $p_B = p_A / 2 + 0 / 2 = p_A/2$ which is still non-negligible. So it violets the assumption that $G$ is a secure PRG. Thus $H$ is a secure PRG.
 		\item
 			Expansion rate: $|H(x)| = |G(x_L|x_R)|G(x_R|x_L)| = 4|x|$.\\
-			No, it is not a PRG.\\
+			No, it is not a secure PRG.\\
 			\textbf{Proof:}
-			Assume $\ell = 2n$, $\overline{G}$ is a PRG and it is a mapping from $\{0,1\}^{4n}$ to $\{0,1\}^{8n}$.
-			define $G$ as follow, if $G$ has a pattern $x_L,x_R,x_R,x_L$, which means both first and fourth quarter of bits, and second and third quarter bits are same, $G$ map to $1^{8n}$. Otherwise, $G$ is same as $\overline{G}$.\par
-			First, $G$ is a PRG, that because, the probability of $G$ map to $1^{8n}$ is $\frac{2^{2n}}{2 ^{4n}}= 2^{-2n} $ which is still negligible. However, if you applied $G$ into $H$, all outputs is $1^{8n}$, obviously not a PRG.
+			Assume it is a secure PRG, then construct $F = H(x_L|x_R)|H(x_R|x_L)$. According to assumption, $F$ is secure. However, $F = G(x_L|x_R)|G(x_R|x_L)|G(x_R|x_L)|G(x_L|x_R)$, the first and fouth quarter of bits are same, second and the third quarter of bits are same. So we can easy construct a $D$, which check the first, fourth quarter, and second and third quarter. Then $\text{Pr} = |1 - 2^{2n}|$ is non-negligible which constract with $F$ is a secure PRG. So it is not a secure PRG.
 		\item
 			Expansion rate: $|H(x)| = |G(z_L)|G(z_R)| = 2|G(x)| / 2 * 2 = 4|x|$.\\
-			Yes, it is a PRG.\\
+			Yes, it is a secure PRG.\\
 			\textbf{Proof:}
 			Suppose, there is a efficient attack $A$ against $H$. Construct attack $B$ against $G$ as follow:\\ calculate $G(G(x)_L)|G(G(x)_R)$. Then use $A$ attack it. Since $H(x) = G(z_L)|G(z_R) = G(G(x)_L)|G(G(x)_R)$, $B$ is a efficient attack which contradict with the assumption. Thus $H$ is a secure PRG.
 	\end{enumerate}
 \item [Problem 2]\textbf{Solution:}\par
 
 \item [Problem 3]\textbf{Solution:}\par
-\item [Problem 4]\textbf{Solution:}\par
 \end{enumerate}
 \end{document}
