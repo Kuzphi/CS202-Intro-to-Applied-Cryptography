@@ -48,6 +48,7 @@
 			Expansion rate: $|H(x)| = |G(z_L)|G(z_R)| = 2|G(x)| / 2 * 2 = 4|x|$.\\
 			Yes, it is a secure PRG.\\
 			\textbf{Proof:}
+<<<<<<< HEAD
 			Suppose, there is a efficient attack $A$ against $H$. Construct attack $B$ against $G$ as follow:\\ Since konwing $G(x)$ now, we are able to calculate $G(G(x)_L)|G(G(x)_R)$. Then use $A$ to attack it. Since $H(x) = G(z_L)|G(z_R) = G(G(x)_L)|G(G(x)_R)$, $B$ is a efficient attack which contradict with the assumption. Thus $H$ is a secure PRG.
 	\end{enumerate}
 \item [Problem 2]\textbf{Solution:}\par
@@ -56,5 +57,12 @@
 	If the $H$ in problem 1 is secure PRG, then its stream cipher is secure. Otherwise it is not secure.
 \item [Problem 3]\textbf{Solution:}\par
 
+=======
+			Suppose, there is a efficient attack $A$ against $H$. Construct attack $B$ against $G$ as follow:\\ calculate $G(G(x)_L)|G(G(x)_R)$. Then use $A$ attack it. Since $H(x) = G(z_L)|G(z_R) = G(G(x)_L)|G(G(x)_R)$, $B$ is a efficient attack which contradict with the assumption. Thus $H$ is a secure PRG.
+	\end{enumerate}
+\item [Problem 2]\textbf{Solution:}\par
+
+\item [Problem 3]\textbf{Solution:}\par
+>>>>>>> ccef08e7fb75445f0ee091fb2342dace9fa8b4b1
 \end{enumerate}
 \end{document}
