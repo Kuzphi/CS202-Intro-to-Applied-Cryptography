@@ -43,18 +43,18 @@
 			Expansion rate: $|H(x)| = |G(x_L|x_R)|G(x_R|x_L)| = 4|x|$.\\
 			No, it is not a secure PRG.\\
 			\textbf{Proof:}
-			Assume it is a secure PRG, then construct $F = H(x_L|x_R)|H(x_R|x_L)$. According to assumption, $F$ is secure. However, $F = G(x_L|x_R)|G(x_R|x_L)|G(x_R|x_L)|G(x_L|x_R)$, the first and fouth quarter of bits are same, second and the third quarter of bits are same. So we can easy construct a $D$, which check the first, fourth quarter, and second and third quarter. Then $\text{Pr} = |1 - 2^{2n}|$ is non-negligible which constract with $F$ is a secure PRG. So it is not a secure PRG.
+			Assume it is a secure PRG, then construct $F = H(x_L|x_R)|H(x_R|x_L)$. According to assumption, $F$ is secure. However, $F = G(x_L|x_R)|G(x_R|x_L)|G(x_R|x_L)|G(x_L|x_R)$, the first and fourth quarter of bits are same, second and the third quarter of bits are same. So we can easy construct a $D$, which check the first, fourth quarter, and second and third quarter. Then $\text{Pr} = |1 - 2^{2n}|$ is non-negligible which contradict with $F$ is a secure PRG. So it is not a secure PRG.
 		\item
 			Expansion rate: $|H(x)| = |G(z_L)|G(z_R)| = 2|G(x)| / 2 * 2 = 4|x|$.\\
 			Yes, it is a secure PRG.\\
 			\textbf{Proof:}
-			Suppose, there is a efficient attack $A$ against $H$. Construct attack $B$ against $G$ as follow:\\ Since konwing $G(x)$ now, we are able to calculate $G(G(x)_L)|G(G(x)_R)$. Then use $A$ to attack it. Since $H(x) = G(z_L)|G(z_R) = G(G(x)_L)|G(G(x)_R)$, $B$ is a efficient attack which contradict with the assumption. Thus $H$ is a secure PRG.
+			Suppose, there is a efficient attack $A$ against $H$. Construct attack $B$ against $G$ as follow:\\ Since knowing $G(x)$ now, we are able to calculate $G(G(x)_L)|G(G(x)_R)$. Then use $A$ to attack it. Since $H(x) = G(z_L)|G(z_R) = G(G(x)_L)|G(G(x)_R)$, $B$ is a efficient attack which contradict with the assumption. Thus $H$ is a secure PRG.
 	\end{enumerate}
 \item [Problem 2]\textbf{Solution:}\par
-	Suppopse we have an efficient algorithm $A$ to attack $H$. Then construct $B$ as follow:\\
-	$B$ choose $m_0$ and $m_1$ and send them to $D$, and get the ciphertext $c$ from $D$. Then caculate $w_0 = m_0 \oplus c$. if $B(w_0)$ returns $1$, $A$ returns $0$, otherwise, $A$ returns $1$.
+	Suppose we have an efficient algorithm $A$ to attack $H$. Then construct $B$ as follow:\\
+	$B$ choose $m_0$ and $m_1$ and send them to $D$, and get the cipher-text $c$ from $D$. Then calculate $w_0 = m_0 \oplus c$. if $B(w_0)$ returns $1$, $A$ returns $0$, otherwise, $A$ returns $1$.
 	If the $H$ in problem 1 is secure PRG, then its stream cipher is secure. Otherwise it is not secure.
 \item [Problem 3]\textbf{Solution:}\par
-
+	Assume attacker $A$ breaks MM-CPA of E. Construct sequence $D$ as follow, for every $i$, $m_0^i = m_1^{i-1}$, $b_i = i\%2$. According to hint, there must exist a $i$, that a distinguishes $D_i$ and $D_{i-1}$ with a probability $\epsilon^\prime_A = \epsilon_A/p(n)$. Since $D_i$ and $D_{i-1}$ differ on a single cipher-text($m^i_1$), the probability of the difference between $m^{i-1}_1$ and $m^i_0$ is non-negligible. Thus, in attack $A^\prime$, choose $m^\prime_0 = m^{i-1}_1$ and $m^\prime_1 = m^{i}_0$. Then $A^\prime$ is a efficient attacker of CPA of E. 
 \end{enumerate}
 \end{document}
