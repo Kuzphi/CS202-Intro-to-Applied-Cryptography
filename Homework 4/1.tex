@@ -1,0 +1,72 @@
+\normalfont\documentclass[letterpaper,11pt]{article}
+\usepackage{amsmath, amsfonts,amssymb,latexsym}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{flexisym}
+\usepackage{algorithm}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\begin{document}
+\setlength{\parindent}{2ex}
+\newcommand{\header}{
+	\noindent \fbox{
+	\begin{minipage}{6.4in}
+  	\medskip
+  	\textbf{CS 202 - Introduction to Applied Cryptography} \hfill \textbf{Fall 2016} \\[1mm]
+  	\begin{center}
+    	{\Large HomeWork 3} \\[3mm]
+  	\end{center}
+	\today \hfill \itshape{Liangjian Chen}
+	\medskip
+	\end{minipage}}
+}
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+
+\bigskip
+\header
+
+\begin{enumerate}
+\item [Problem 1]\textbf{Solution:}\par
+	\begin{enumerate}
+		\item[OFB] Assume $m_0 = 0^n$ and $m_1 = 1^n$. Change the first digit of $c$ to obtain $c^\prime$ and decrypt the $c^\prime$. And the decrypt answer would be either $10^n$($b = 0$) or $01^n$($b = 1$).
+		\item[CBC] Assume $m_0 = 0^n$ and $m_1 = 1^n$, block length is $l$. and change the last bit of $c$ to obtain $c^\prime$ and decrypt the $c^\prime$. Since in CBC mode, last digit only affect last block. So after discarding the last block, answer would be either $0^{n-l}$($b = 0$) or $1^{n-l}$($b = 1$).
+				
+	\end{enumerate}
+\item [Problem 2]\textbf{Solution:}\par
+	\begin{enumerate}
+		\item None of three applied. Recall the last homework 1(a), PRG would create a detectable output pattern if it has a detectable input pattern. So $G([k|0])$ and $G([k|1])$ is not PRG anymore, so it is not Indistinguishable. Since not Indistinguishable, it is not CPA or CCA secure as well.
+		\item it is Indistinguishable but not CPA-secure and not CCA-secure.\par
+			F(k,k) is same as PRG.So it works like OTP. But not CPA or CCA secure.
+		\item it is Indistinguishable and CPA-secure but not CCA-secure. \par
+			Because, $G(F(r,k))$ is same as a PRF. So it work as construction 3.30 in text book. which is CPA-secure.
+		\item it is Indistinguishable and CPA-secure but not CCA-secure. \par
+			Since G is a PRG, then we can see $k_L$ and $k_R$ is two independent keys.Thus $v$ is same as construction 3.30 in text book and $t$ is a random function's mapping for $v$ which could not provide any more information. Thus this scheme works same as construction 3.30 which is CPA-secure.
+	\end{enumerate}
+\item [Problem 3]\textbf{Solution:}\par
+	\begin{enumerate}
+		\item Assume we have got a pair$(m,t_1)$, then ask $t_1|x$ to obtain$(t_1|x,t_2)$. Then we now a valid new pair $(m|x,t_2)$.
+		\item Assume we have got two triples $(IV_1,m_1,t_1)$, $(IV_2,m_2,t_2)$. Then we find all different bits between $IV_1$, $IV_2$. Then change the corresponding bits on $m_1$ to obtain $m3$. Now we get a new valid triple $(IV_2,m_3,t1)$. Because in CBC-MAC, input is the XOR of IV and first message block. If we change all bits different of $m_1$, then the input of first block is same (i.e. $IV_1 xor m_1 = IV_2 xor m_3$) and rest of block are same.
+		\item
+			Easily know $F_k(m_1) = t_1$, then we change $m_l = t_{l-1} \oplus m_1$ to get a new massage. and only final tag change which should be $t_1$ now. Thus we obtain a new pair$(m_1|m_2|..|m_{l-1}|(t_{l-1}\oplus m_1), t_1|t_2|..|t_{l-1}|t_1)$.
+	\end{enumerate}
+\item [Problem 4]\textbf{Solution:}\par
+	if we have already get $a = M(k|x) = H(k|x|pad_x)$, then for any data y we feed $a|y$ then assume $b = H(a|y|pad_y) = H(k|x|pad_x|y|pad_y) = M(k,x|pad_x|y|pad_y)$. So without query the $x|pad_x|y|pad_y$, we get a new valid pair $(x|pad_x|y|pad_y, b)$.
+\item [Problem 5]\textbf{Solution:}\par
+	\begin{enumerate}
+		\item No, if $|m| = n$ and $m = m^\prime|0$ holds, then $H(m) = H(m^\prime)$. if we ignore the length then, two string would be same after padding.
+		\item Yes, Assume $I_i = z_{i-1}||x_i$. First we can see that $H(m) = H(m^\prime)$ iff $|m| = |m^\prime|$.
+		Then we proof that $x_i = x_i^\prime$. To proof that, first we notice that $I_{B+2} = I_{B+2}^\prime$.
+		otherwise a collision found in $h$. for any integer $i$, $I_{x} = I_{x}^\prime$ holds for all $x \ge i$, then $I_{i - 1} = I_{i - 1}^\prime$. Because if $I_{i - 1} \neq I_{i - 1}^\prime$, we will capture an collision. Thus $\forall i, I_{i} = I_{i}^\prime$ which indicate that $\forall i, x_{i} = x_{i}^\prime$. i.e. a collision in $H$ will lead to a collision in $h$, but $h$ is a collision resistant function, so is the $H$.
+		\item Yes, if $|m| = |m^\prime|$, the proof will be same as (b). otherwise we will find a collision in last step($h^s(x_B||L) = h^s(x_B^\prime||L^\prime)$ however $L \neq L^\prime$.
+		\item Yes, if $|m| = |m^\prime|$, the proof will be same as (b). Th tricky part is $|m| \neq |m^\prime|$. Let's assume $\ell = |m|$ and $ \ell ^\prime= |m^\prime|$ and $\ell > \ell ^\prime$. By follow the same idea on (b), we can find the only to way construct a collision $H$, without having collision on $h$, is that after $\ell- \ell ^\prime$ times iterator, the $H$ outputs $\ell ^\prime$. For example, $m = x_1|x_2|x_3|x_4$, $h^s(h^s(4||x_1)||x_2) = 2$, then $H(m) = H(x_3||x_4)$. However if we take expect value of how many times we need to try to find a collision, we can see it is exponential result(same with birthday paradox). i.e.
+		\begin{align*}
+			&1\cdot \frac{1}{2^n} + 2 \cdot \frac{2^n-1}{2^n} \cdot \frac{2}{2^n} + 3 \cdot \frac{2^n-1}{2^n} \cdot\frac{2^n-2}{2^n} \cdot \frac{3}{2^n} +...+2^n\frac{(2^n-1)!}{2^{(2^n-1)*2^n}}\cdot \frac{2^{n}}{2^{n}} = O(2^{n/2})
+		\end{align*}
+	\end{enumerate}
+\end{enumerate}
+\end{document}
