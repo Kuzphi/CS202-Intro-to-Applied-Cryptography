@@ -1,0 +1,50 @@
+\normalfont\documentclass[letterpaper,11pt]{article}
+\usepackage{amsmath, amsfonts,amssymb,latexsym}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{flexisym}
+\usepackage{algorithm}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\begin{document}
+\setlength{\parindent}{2ex}
+\newcommand{\header}{
+	\noindent \fbox{
+	\begin{minipage}{6.4in}
+  	\medskip
+  	\textbf{CS 202 - Introduction to Applied Cryptography} \hfill \textbf{Fall 2016} \\[1mm]
+  	\begin{center}
+    	{\Large Final} \\[3mm]
+  	\end{center}
+	\today \hfill \itshape{Liangjian Chen}
+	\medskip
+	\end{minipage}}
+}
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+
+\bigskip
+\header
+
+\begin{enumerate}
+\item [Problem 1]\textbf{Solution:}\par
+	\begin{enumerate}
+		\item No. Because a MAC scheme does not care about whether it leak the information of original to eavesdropper. Textbook raise a secure MAC where the first bit of the tag is always equal to the first bit of the message as an example. In this case whether MAC scheme has unique tags, it is always insecure.
+		\item CCA-security means that even adversary can decrypt any cipher-text he want, it still can not get information about original message. Thus we can see CCA-security acquiesced that adversary has the access to the cipher-text set. So creating valid cipher-text does not make adversary stronger and it won't do harm to CCA-security.\par
+		Actually, here is a instance I found in wiki-pedia which is CCA-security but not authenticated encryption.\par
+		Optimal asymmetric encryption padding(RSA-OAEP)\par
+		https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding
+	\end{enumerate}
+\item [Problem 2]\textbf{Solution:}\par
+	Yes it is. Proof it by contradiction.\par
+	Assume $\Pi^\prime$ is not CPA-security, and there is a PPT adversary $\mathcal{A}^\prime$ which is able to successfully attack $\Pi^\prime$. Construct $\mathcal{A}$ as follow:\par
+	$\mathcal{A}$ receive the $pk$ and $Enc(m)$, and construct $pk^\prime = (pk,pk)$ and $Enc^\prime(m) = (Enc(m),Enc(m))$ and send it to the $\mathcal{A}^\prime$. $\mathcal{A}$ return the result of $\mathcal{A}^\prime$ as its own result.\par
+	Since $\mathcal{A}^\prime$ successfully attacking $\Pi^\prime$,$Pr[PubK^{eav}_{\mathcal{A},\Pi}] = Pr[PubK^{eav}_{\mathcal{A}^\prime,\Pi^\prime}] > \frac{1}{2} + negl(n)$, which contradict with the assumption that $\Pi$ is secure.\par
+	Thus original statement holds.
+
+\end{enumerate}
+\end{document}
