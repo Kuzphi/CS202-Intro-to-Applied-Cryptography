@@ -32,26 +32,74 @@
 
 \begin{enumerate}
 \item [Problem 1]\textbf{Solution:}\par
+$\Pi^\prime$ is not a TDF, because multiple key would leak the information about the orignal message.\\
+for fix $e$, we will have following congruence modulo equations set.
+\begin{eqnarray*}
+c_1 = m^{e} \mod n_1\\
+c_2 = m^{e} \mod n_2\\
+c_3 = m^{e} \mod n_3\\
+c_4 = m^{e} \mod n_4\\
+...\\
+c_n = m^{e} \mod n_n\\
+\end{eqnarray*}
+Denote $N$ as $ \prod\limits_{i=1}^{n}n_i$.\par
+By Chinese remainder theorem, we can easily calculate the $m^e \mod N$. Because $N$ is very likely to be larger than $m^e$. If this case applied, $m^e$ \textbf{over the integer}. Therefore the original message leaked.\par
+This problem is same with the what was described in textbook in page 414 about attack plain RSA with sending the same message to multiple receivers.
 \item [Problem 2]\textbf{Solution:}\par
 	\begin{enumerate}
-	\item
-	\item
-	\item
-	\item
+	\item No it is not CPA secure.\\ Intuitively, since not a random encryption, it is not a CPA secure. Formally, the adversary $\mathcal{A}$ simply request the encryption oracle to encrypt the message $m_0$ and $m_1$ to get $c_0$ and $c_1$. Then comparing them to the challenge message $c$ to easily break the secure. 
+	\item No it is not CPA secure.\\
+	the output leak the $r$. Thus the adversary $\mathcal{A}$ could calculate the bitmask $F(pk,r)$ and recover the original message.
+	\item Yes, it is CPA secure.
+	Assume it is not CPA secure, and there is a PPT adversary $\mathcal{A}$ successfully attack $E(pk,m) = (F(pk,r),r \oplus m)$.
+	Construct a new adversary $\mathcal{A}^\prime$ against $F$ as following:\\
+	get the $(F(pk,r),r \oplus m)$ from the encryption, and feed it to $\mathcal{A}$ to obtain $m$. Then easily get $r = r \oplus m \oplus m$ without the knowledge about $td$. Obviously, it is a PPT adversary, and with the non-eligible probability $Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$, then $Pr[\text{Invert}_{A,f}(n) = 1] = Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$ is still non-eligible. However it contrast with the assumption that $F$ is a one-way function. Thus it is a CPA secure frame.
+	\item Yes it is CPA secure.
+	Compared to subproblem (c). $m$ exclusive a random hash function of $r$. $r$ is chosen randomly, and after encoding by a random hash function, it is still a random bit-string. So it is still a CPA-secure.
 	\end{enumerate}
 \item [Problem 3]\textbf{Solution:}\par
+	Yes it is One-way function. Prove it by induction.
+	First, if $B = 1$, $H^h_{1,IV}(x) = h(x)$, it must be one-way function.\par
+	Assume for any $B < b$, $H^h_{B,IV}(x)$ is one-way function. Consider the case when $B = b$.\par
+	First we can obtain that $H^h_{b,IV}(x)= h(H^h_{b-1,IV}(x_{[1:b-1]}) || X_b)$. Since $h$ is one-way, it is infeasible to get $X_b$ and $H^h_{b-1,IV}(x_{[1:b-1]})$. Therefore it is infeasible to get $X_{[1:b]}$ (adversary even do not know the output of $H^h_{b-1,IV}$). Thus $H^h_{b,IV}(x)$ is a OWF.
+	By induction, for all integer $B$, $H^h_{B,IV}(x)$ is OWF.\par
+	($X_i$ means $i^{th}$ block in input. $X_{[1:n]}$ means first $i$ blocks in input)
 \item [Problem 4]\textbf{Solution:}\par
+	Intuitively, since $G^{|m|}$ is a PRG, there is no way to recover the $m$ except adversary has any information about $r$. However $r$ is covered by a CPA-secure PKE which is computational infeasible to track. Thus this is a CPA-secure PKE.
 \item [Problem 5]\textbf{Solution:}\par
 	\begin{enumerate}
+	\item It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
+	Against eavesdropper:\par
+		From Diffie-Hellamn protocol(DHP), we know that it is impossible to obtain $g^{ab}$ for Eve. Therefore it is impossible to obtain the $H(g^{ab})$ as well. Thus it is secure against eavesdropper.\par
+	Against MITM:\par
+		MIMT against DHP would result in that two parties use attacker's key. Therefore, even the key is hashed by $H$, as long as Mallory encode her key by $H$ as well, it's still insecure. \par
+
+	\item It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
+	Against eavesdropper:\par
+		It is a CPA-secure public key encryption, so Eve is not able to recover or Bob's key. Thus, she can not send message to both side(failed in MAC). Also with out the private key she can not decrypt an message as well.\par
+	Against MITM:\par
+		First Mallory intercept Alice's public key, and send her public key to Bob. Then Mallory intercept Bob's MAC key, and send her MAC key to Alice. Though Mallory can not decrypt the message on Alice side and send message to Bob. However she can send message to Alice and decrypt the message from Bob. Thus it is still KE-insecure.
 	\item
+	It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
+	Against eavesdropper:\par
+		This scheme is stronger than (b). (b) is enough against eavesdropper, therefore so as this scheme\par
+	Against MITM:\par
+		Same with(c). Because, by using public key encryption, Mallory lose her ability to decrypt Alice's message. Public key is supposed to be known by anyone. So hash the public key won't improve the secure. However, with the Bob's key, Mallory still can forge the message.
 	\item
-	\item
-	\item
+	It is KE secure against both eavesdropper and MITM. \par
+	Against eavesdropper:\par
+		It is same as the above one.\par
+	Against MIMT:\par
+		Now, Mallory only know the public key, she can not send message to both side because without MAC key she can not forge an message. Also without the private key, she can not decrypt the message as well. Thus it is KE secure.
 	\end{enumerate}
 \item [Problem 6]\textbf{Solution:}\par
 	\begin{enumerate}
-	\item
-	\item
+	\item assume a a signature($\sigma,y$) on $m$. We can forge a new signature $(m-1, f(\sigma))$.
+	\item the signature is a pair $(\sigma, \sigma^\prime) = (f^{n-m}(x), f^m(x^\prime))$. And the verify procedure is check whether $y = f^m(\sigma), \text{ and } y^\prime = f^{n-m}(\sigma^\prime)$.\par
+	Prove:\par
+	Assume, now we have a data with message $m$, signature $(\sigma, \sigma^\prime)$. For any other message $m^\prime$, either $m > m^\prime$ or $n - m > n - m ^\prime$ must holds. Let's might as well assume it is $m > m^\prime$. So to forge a new signature, we must know the preimage(or several order of preimage) of $\sigma$. However, $f$ is an One-way, which infeasible to track preimage.\par
+	Thus, only way to obtain $f^{m^\prime}(x^\prime)$ is random guessing. However the size of domain $D$ is $2^{n}$. So it is still infeasible.\par
+	Thus this signature is secure.
 	\end{enumerate}
 \end{enumerate}
 \end{document}
