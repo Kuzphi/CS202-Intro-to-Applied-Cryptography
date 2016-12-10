@@ -1,0 +1,37 @@
+\normalfont\documentclass[letterpaper,11pt]{article}
+\usepackage{amsmath, amsfonts,amssymb,latexsym}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{flexisym}
+\usepackage{algorithm}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\begin{document}
+\setlength{\parindent}{2ex}
+\newcommand{\header}{
+	\noindent \fbox{
+	\begin{minipage}{6.4in}
+  	\medskip
+  	\textbf{CS 202 - Introduction to Applied Cryptography} \hfill \textbf{Fall 2016} \\[1mm]
+  	\begin{center}
+    	{\Large Final} \\[3mm]
+  	\end{center}
+	\today \hfill \itshape{Liangjian Chen}
+	\medskip
+	\end{minipage}}
+}
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+
+\bigskip
+\header
+
+\begin{enumerate}
+	\item[1.1]
+	The prove broken where combine the euqation (11.3) and (11.6) to get (11.2). Because RSA plian scheme is not CPA-secure, so when adversary $\mathcal{A}$ observe the $Enc_{pk}(m_{1,0})$, it would change its behavior on second message pair. Thus equation (11.3) and (11.6) does not holds anymore. Therefore so is the all rest proof.
+\end{enumerate}
+\end{document}
