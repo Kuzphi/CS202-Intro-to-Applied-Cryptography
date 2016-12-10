@@ -45,6 +45,8 @@ c_n = m^{e} \mod n_n\\
 Denote $N$ as $ \prod\limits_{i=1}^{n}n_i$.\par
 By Chinese remainder theorem, we can easily calculate the $m^e \mod N$. Because $N$ is very likely to be larger than $m^e$. If this case applied, $m^e$ \textbf{over the integer}. Therefore the original message leaked.\par
 This problem is same with the what was described in textbook in page 414 about attack plain RSA with sending the same message to multiple receivers.
+\item [Problem 1.1]\textbf{Solution:}\par
+	The prove broken where combine the euqation (11.3) and (11.6) to get (11.2). Because RSA plian scheme is not CPA-secure, so when adversary $\mathcal{A}$ observe the $Enc_{pk}(m_{1,0})$, it would change its behavior on second message pair. Thus equation (11.3) and (11.6) does not holds anymore and so does the rest proof.
 \item [Problem 2]\textbf{Solution:}\par
 	\begin{enumerate}
 	\item No it is not CPA secure.\\ Intuitively, since not a random encryption, it is not a CPA secure. Formally, the adversary $\mathcal{A}$ simply request the encryption oracle to encrypt the message $m_0$ and $m_1$ to get $c_0$ and $c_1$. Then comparing them to the challenge message $c$ to easily break the secure. 
@@ -55,7 +57,8 @@ This problem is same with the what was described in textbook in page 414 about a
 	Construct a new adversary $\mathcal{A}^\prime$ against $F$ as following:\\
 	get the $(F(pk,r),r \oplus m)$ from the encryption, and feed it to $\mathcal{A}$ to obtain $m$. Then easily get $r = r \oplus m \oplus m$ without the knowledge about $td$. Obviously, it is a PPT adversary, and with the non-eligible probability $Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$, then $Pr[\text{Invert}_{A,f}(n) = 1] = Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$ is still non-eligible. However it contrast with the assumption that $F$ is a one-way function. Thus it is a CPA secure frame.
 	\item Yes it is CPA secure.
-	Compared to subproblem (c). $m$ exclusive a random hash function of $r$. $r$ is chosen randomly, and after encoding by a random hash function, it is still a random bit-string. So it is still a CPA-secure.
+	Compared to subproblem (c). $m$ exclusive a random hash function of $r$. $r$ is chosen randomly, and after encoding by a random hash function, it is still a random bit-string. So it is still a CPA-secure.\par
+	the formal proof could be refered by the my poof in problem 5, acutually, these two problem is nearly same(subsitute $G$ by $H$).
 	\end{enumerate}
 \item [Problem 3]\textbf{Solution:}\par
 	Yes it is One-way function. Prove it by induction.
@@ -65,7 +68,24 @@ This problem is same with the what was described in textbook in page 414 about a
 	By induction, for all integer $B$, $H^h_{B,IV}(x)$ is OWF.\par
 	($X_i$ means $i^{th}$ block in input. $X_{[1:n]}$ means first $i$ blocks in input)
 \item [Problem 4]\textbf{Solution:}\par
-	Intuitively, since $G^{|m|}$ is a PRG, there is no way to recover the $m$ except adversary has any information about $r$. However $r$ is covered by a CPA-secure PKE which is computational infeasible to track. Thus this is a CPA-secure PKE.
+	Intuitively, since $G^{|m|}$ is a PRG, there is no way to recover the $m$ except adversary has any information about $r$. However $r$ is covered by a CPA-secure PKE which is computational infeasible to track. Thus this is a CPA-secure PKE.\par
+	Proof it by reduction:
+		Assume there is a PPT adversary $\mathcal{A}^\prime$ successfully against $E^\prime$. Then I will construct a PPT adversary $\mathcal{A}$ against $E$.
+		\begin{enumerate}
+			\item[1] $\mathcal{A}$ choose $r_0,r_1$ and send them to $E$, and get challenge text $E(pk,r_b)$
+			\item[2] $\mathcal{A}^\prime$ choose two message $m_0,m_1$, and send them to $\mathcal{A}$.
+			\item[3] $\mathcal{A}$ randomly choose a bit $b^{\prime\prime}$, and send $(G^{|m|}(r_{b^{\prime\prime}})\oplus m_{b^{\prime\prime}}, E(pk,r_b))$.
+			\item[4] $\mathcal{A}^\prime$ return a bit $b^\prime$ to $\mathcal{A}$
+			\item[5] if $b^\prime = b^{\prime\prime}$, $\mathcal{A}$ return $b^{\prime\prime}$ to $E$,else $\mathcal{A}$ return a random bit.
+		\end{enumerate}
+		Since $\mathcal{A}'$ break $E'$, $Pr[\text{PEK}^{eva}_{\mathcal{A}'}]$ is $\frac{1}{2}+non-negl(n)$. Then we consider about $Pr[\text{PEK}^{eva}_{\mathcal{A}}]$.
+		\begin{align*}
+		Pr[\text{PEK}^{eva}_{\mathcal{A}}] &= \frac{1}{2} * (Pr[\text{PEK}^{eva}_{\mathcal{A}}||b = b''] + Pr[\text{PEK}^{eva}_{\mathcal{A}}||b \neq b''])\\
+		&= \frac{1}{2} * (Pr[\text{PEK}^{eva}_{\mathcal{A}'}] + \frac{1}{2})\\
+		&= \frac{1}{2} + non-negl(n)
+		\end{align*}
+		Which lead the conclusion that $\mathcal{A}$ break $E$. However it contranst with the assumption that $E$ is CPA-secure. Thus, there is no such $\mathcal{A}'$ break $E'$, therefore $E'$ is CPA-secure.
+
 \item [Problem 5]\textbf{Solution:}\par
 	\begin{enumerate}
 	\item It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
@@ -78,19 +98,19 @@ This problem is same with the what was described in textbook in page 414 about a
 	Against eavesdropper:\par
 		It is a CPA-secure public key encryption, so Eve is not able to recover or Bob's key. Thus, she can not send message to both side(failed in MAC). Also with out the private key she can not decrypt an message as well.\par
 	Against MITM:\par
-		First Mallory intercept Alice's public key, and send her public key to Bob. Then Mallory intercept Bob's MAC key, and send her MAC key to Alice. Though Mallory can not decrypt the message on Alice side and send message to Bob. However she can send message to Alice and decrypt the message from Bob. Thus it is still KE-insecure.
+		First Mallory intercept Alice's public key, and send her public key to Bob. Then Mallory intercept Bob's MAC key, and decrypt it by her private key, and encrypt it by Alice's public key. Then sends it to the Alice. Thus Mallory get the key, which is not KE secure.
 	\item
 	It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
 	Against eavesdropper:\par
 		This scheme is stronger than (b). (b) is enough against eavesdropper, therefore so as this scheme\par
 	Against MITM:\par
-		Same with(c). Because, by using public key encryption, Mallory lose her ability to decrypt Alice's message. Public key is supposed to be known by anyone. So hash the public key won't improve the secure. However, with the Bob's key, Mallory still can forge the message.
+		Now, Mallory can not intercept Alice's key and send her public key to Bob. However, she still can intercept Bob's key, and choose her key then encrypt by Alice's public key and send it Alice. Therefor, Alice would believe that Mallory's key is the key that Bob send to him. Thus it is not a KE secure.
 	\item
-	It is KE secure against both eavesdropper and MITM. \par
+	It is KE secure against eavesdropper, but not successfully against man-in-the-middle(MITM). \par
 	Against eavesdropper:\par
 		It is same as the above one.\par
 	Against MIMT:\par
-		Now, Mallory only know the public key, she can not send message to both side because without MAC key she can not forge an message. Also without the private key, she can not decrypt the message as well. Thus it is KE secure.
+		Now, Mallory intercept the Alice's public key. Then she forges a her own public key and send it to Bob. After Bob,send back the messgae, Mallory decrypt and got Bob's key by her private key.\par
 	\end{enumerate}
 \item [Problem 6]\textbf{Solution:}\par
 	\begin{enumerate}
