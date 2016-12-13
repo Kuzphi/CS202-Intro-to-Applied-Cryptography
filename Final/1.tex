@@ -46,6 +46,7 @@ Denote $N$ as $ \prod\limits_{i=1}^{n}n_i$.\par
 By Chinese remainder theorem, we can easily calculate the $m^e \mod N$. Because $N$ is very likely to be larger than $m^e$. If this case applied, $m^e$ \textbf{over the integer}. Therefore the original message leaked.\par
 This problem is same with the what was described in textbook in page 414 about attack plain RSA with sending the same message to multiple receivers.
 \item [Problem 1.1]\textbf{Solution:}\par
+	This proof is base on the \textit{*Proof of Theorem 11.6} in [KT] page 383.\par
 	The prove broken where combine the euqation (11.3) and (11.6) to get (11.2). Because RSA plian scheme is not CPA-secure, so when adversary $\mathcal{A}$ observe the $Enc_{pk}(m_{1,0})$, it would change its behavior on second message pair. Thus equation (11.3) and (11.6) does not holds anymore and so does the rest proof.
 \item [Problem 2]\textbf{Solution:}\par
 	\begin{enumerate}
@@ -58,7 +59,7 @@ This problem is same with the what was described in textbook in page 414 about a
 	get the $(F(pk,r),r \oplus m)$ from the encryption, and feed it to $\mathcal{A}$ to obtain $m$. Then easily get $r = r \oplus m \oplus m$ without the knowledge about $td$. Obviously, it is a PPT adversary, and with the non-eligible probability $Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$, then $Pr[\text{Invert}_{A,f}(n) = 1] = Pr[\text{PubK}^{eav}_{\mathcal{A},\Pi} = 1]$ is still non-eligible. However it contrast with the assumption that $F$ is a one-way function. Thus it is a CPA secure frame.
 	\item Yes it is CPA secure.
 	Compared to subproblem (c). $m$ exclusive a random hash function of $r$. $r$ is chosen randomly, and after encoding by a random hash function, it is still a random bit-string. So it is still a CPA-secure.\par
-	the formal proof could be refered by the my poof in problem 5, acutually, these two problem is nearly same(subsitute $G$ by $H$).
+	the formal proof could be refered by the my poof in problem 4, acutually, these two problem is nearly same(subsitute $G$ by $H$).
 	\end{enumerate}
 \item [Problem 3]\textbf{Solution:}\par
 	Yes it is One-way function. Prove it by induction.
